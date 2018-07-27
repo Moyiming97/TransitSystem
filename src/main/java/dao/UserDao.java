@@ -44,54 +44,52 @@ public class UserDao extends BaseDao<Integer, User> {
       ps.setInt(1, pk);
       ps.execute();
     } catch (SQLException ex) {
-        Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
-    }}
+      Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+    }
+  }
 
-    //UserService register to call save
-    //告诉SERVICE层建了哪个用户
-    //uid我说的不算，是数据库系统自己决定生成的
-    @Override
-    public User save(User user) {
-        //往数据库里插数据，UID数据库系统生成
-        try (PreparedStatement ps = this.connection.prepareStatement("INSERT INTO public.user (name, email, password) VALUES (?, ?, ?) RETURNING uid")) {
-            //how about save admin user??? think!
-            //啥时把 uid 自动生成好了？
-            // !!!!!!!!以下三行代码是彻底的把数据保存在数据库里，电脑关了、intellij关了，这个数据都不会丢，但得保证数据库被导出做备份
-            ps.setString(1, user.getName());
-            ps.setString(2, user.getEmail());
-            ps.setString(3, user.getPassword());
-            //result - ps.executeQuery()建立游标，然后返回给ResultSet
-             ResultSet result = ps.executeQuery();
+  //UserService register to call save
+  //告诉SERVICE层建了哪个用户
+  //uid我说的不算，是数据库系统自己决定生成的
+  @Override
+  public User save(User user) {
+    //往数据库里插数据，UID数据库系统生成
+    try (PreparedStatement ps = this.connection.prepareStatement("INSERT INTO public.user (name, email, password) VALUES (?, ?, ?) RETURNING uid")) {
+      //how about save admin user??? think!
+      //啥时把 uid 自动生成好了？
+      // !!!!!!!!以下三行代码是彻底的把数据保存在数据库里，电脑关了、intellij关了，这个数据都不会丢，但得保证数据库被导出做备份
+      ps.setString(1, user.getName());
+      ps.setString(2, user.getEmail());
+      ps.setString(3, user.getPassword());
+      //result - ps.executeQuery()建立游标，然后返回给ResultSet
+      ResultSet result = ps.executeQuery();
 
-             //查询-
-            ////RESULT.NEXT 是 TRUE 则是有数据 相当于-问
-            if(!result.next()){
-                return null;}
+      //查询-
+      ////RESULT.NEXT 是 TRUE 则是有数据 相当于-问
+      if (!result.next()) {
+        return null;
+      }
 
 //            return result.next()
 //                    ? new User(result.getInt(1), user.getName(), user.getEmail(),user.getPassword())
 //                    : null;
+      //！！！以下这个newUser 是开始真正向JAVA实例化，就是说这个new才是真正建立的object并存储在java内存在，但电脑关了、intellij关了，
+      //照样 这个 object会在java内存里消失 ！！！
+      User newUser = new User();
+      //要展示哪些 属性 弄清
+      newUser.setUid(result.getInt(1));
+      newUser.setAdmin(false);
+      newUser.setEmail(user.getEmail());
+      newUser.setName(user.getName());
 
-            //！！！以下这个newUser 是开始真正向JAVA实例化，就是说这个new才是真正建立的object并存储在java内存在，但电脑关了、intellij关了，
-            //照样 这个 object会在java内存里消失 ！！！
-            User newUser = new User();
-            //要展示哪些 属性 弄清
-            newUser.setUid(result.getInt(1));
-            newUser.setAdmin(false);
-            newUser.setEmail(user.getEmail());
-            newUser.setName(user.getName());
+      return newUser;
 
-            return newUser;
-
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-
+    } catch (SQLException ex) {
+      Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
     }
+    return null;
+
   }
-
-
 
   //UserService change register info to call update
   public User updateName(User user) {

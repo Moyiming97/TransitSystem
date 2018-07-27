@@ -68,6 +68,16 @@ public class CardDao extends BaseDao<Integer, Card> {
 
   //充值？？
   public Card update(Card bean) {
-    throw new UnsupportedOperationException("Not supported yet.");
+    //先往数据库里填新的名字，数据库永久保存，不是往JAVA里SET
+    try (PreparedStatement ps = this.connection.prepareStatement("UPDATE transit_system.card SET balance = ?, isactive = ? WHERE cid = ?")) {
+      ps.setDouble(1, bean.getBalance());
+      ps.setBoolean(2, bean.isActive());
+      ps.setInt(3, bean.getCid());
+      ps.executeUpdate();
+      return bean;
+    } catch (SQLException ex) {
+      Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return null;
   }
 }
