@@ -1,17 +1,15 @@
 package entity;
 
+import lombok.Data;
 
+@Data
 public class Card {
 
-    public final int cid;
-    public final double balance;
-    public final boolean isActive;
-    public final int uid;
+  private int cid;
 
-    public Card(int cid, double balance, boolean isActive, int uid) {
-        this.cid = cid;
-        this.balance = balance;
-        this.isActive = isActive;
-        this.uid = uid;
-    }
+  private double balance;
+
+  private boolean isActive;
+
+  private int uid;
 }

@@ -12,16 +12,15 @@ import java.sql.SQLException;
 public class Main {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         Class.forName("org.postgresql.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres","jojo1234");
+        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres","900811");
         UserDao userDao = new UserDao(connection);
         //User user = userDao.get(1);
-        User user3 = new User();
-        user3.setEmail("KenChangIgdgsdgdJin@gmail.com");
-        user3.setName("Chang Ken Jin");
-        user3.setAdmin(false);
-        user3.setPassword("12345");
-        userDao.save(user3);
-//        User user2 = userDao.get(2);
+        User user = new User();
+        user.setEmail("KenChang@gmail.com");
+        user.setName("Chang Ken Jin");
+        user.setAdmin(false);
+        user.setPassword("12345");
+        userDao.save(user);
 //    System.out.println(user2.getName() + " " + user2.getPassword() + " "+user2.getEmail());
 
     }
