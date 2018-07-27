@@ -48,3 +48,5 @@ CREATE TABLE "user" (
     password character varying(100)
 );
 
+CREATE UNIQUE INDEX unique_user_email ON "user" (email);
+
