@@ -15,12 +15,17 @@ public class Main {
         Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres","900811");
         UserDao userDao = new UserDao(connection);
         //User user = userDao.get(1);
-        User user = new User();
-        user.setEmail("KenChang@gmail.com");
-        user.setName("Chang Ken Jin");
-        user.setAdmin(false);
-        user.setPassword("12345");
-        userDao.save(user);
+
+        //请求建立的 object，并非是真正存储在java内存的
+        User user3 = new User();
+        user3.setEmail("yyydJin@gmail.com");
+        user3.setName("Chang Ken Jin");
+        user3.setAdmin(false);
+        user3.setPassword("12345");
+        userDao.save(user3);
+
+//        User user2 = userDao.get(2);
+
 //    System.out.println(user2.getName() + " " + user2.getPassword() + " "+user2.getEmail());
 
     }
