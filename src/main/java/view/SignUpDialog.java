@@ -1,10 +1,20 @@
 package view;
 
-import javax.swing.*;
-import javax.swing.border.LineBorder;
-
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 
 import entity.User;
 import service.UserService;
@@ -35,11 +45,10 @@ public class SignUpDialog extends JDialog {
 
     User user = new User();
     user.setEmail(this.getEmail());
-    user.setName(this.getName());
+    user.setName(this.getUsername());
     user.setPassword(this.getPassword());
 
-    final User get = this.userService.getUserDao().get(user.getEmail());
-    if (get != null) {
+    if (!this.userService.checkEmailAvailability(user.getEmail())) {
       JOptionPane.showMessageDialog(SignUpDialog.this,
                                     "Invalid email or email existed",
                                     "Register",
@@ -100,7 +109,7 @@ public class SignUpDialog extends JDialog {
     cs.gridwidth = 1;
     panel.add(lbEmail, cs);
 
-    tfEmail = new JPasswordField(15);
+    tfEmail = new JTextField(15);
     cs.gridx = 1;
     cs.gridy = 2;
     cs.gridwidth = 2;
@@ -108,7 +117,7 @@ public class SignUpDialog extends JDialog {
 
     btnRegister = new JButton("Register");
 
-    btnRegister.addActionListener(SignUpDialog::onClickRegister);
+    btnRegister.addActionListener((ActionEvent e) -> this.onClickRegister(e));
 
     //back to LogIn Page
     btnCancel = new JButton("Cancel");
