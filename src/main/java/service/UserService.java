@@ -4,17 +4,16 @@ import dao.CardDao;
 import dao.UserDao;
 import entity.Card;
 import entity.User;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@AllArgsConstructor
 public class UserService {
 
+  @Getter
   private final UserDao userDao;
 
   private final CardDao cardDao;
-
-  public UserService(UserDao userDao, CardDao cardDao) {
-    this.userDao = userDao;
-    this.cardDao = cardDao;
-  }
 
   public User registerUser(User user) {
     return this.userDao.save(user);
@@ -40,12 +39,4 @@ public class UserService {
     return this.userDao.get(email) == null;
 
   }
-
-//    public Card deleteCard(int uid, int cid, Card card){}
-//
-//    public Card suspendCard(int uid, int cid, Card card){}
-//
-//    public Card addBalance(int uid, int cid, Card card){}
-  // check average monthly cost
-  // view recent trips
 }
