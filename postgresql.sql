@@ -23,19 +23,6 @@ CREATE SCHEMA IF NOT EXISTS transit_system;
 SET search_path TO transit_system;
 
 --
--- TOC entry 200 (class 1259 OID 16403)
--- Name: card; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE card (
-    cid serial PRIMARY KEY,
-    uid integer,
-    isactive boolean,
-    balance double precision
-);
-
-
---
 -- TOC entry 198 (class 1259 OID 16395)
 -- Name: user; Type: TABLE; Schema: public; Owner: -
 --
@@ -46,6 +33,18 @@ CREATE TABLE "user" (
     email character varying(50),
     isAdmin boolean DEFAULT false,
     password character varying(100)
+);
+
+--
+-- TOC entry 200 (class 1259 OID 16403)
+-- Name: card; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE card (
+    cid serial PRIMARY KEY,
+    uid integer REFERENCES "user" (uid),
+    isactive boolean,
+    balance double precision
 );
 
 CREATE UNIQUE INDEX unique_user_email ON "user" (email);
