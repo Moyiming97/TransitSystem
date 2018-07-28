@@ -7,7 +7,7 @@ public class Card {
 
   private int cid;
 
-  private double balance;
+  private double balance = 19;
 
   private boolean isActive;
 

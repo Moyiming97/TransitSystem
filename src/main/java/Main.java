@@ -1,4 +1,6 @@
+import dao.CardDao;
 import dao.UserDao;
+import entity.Card;
 import entity.User;
 
 import javax.swing.*;
@@ -12,17 +14,24 @@ import java.sql.SQLException;
 public class Main {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         Class.forName("org.postgresql.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres","900811");
+        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres","jojo1234");
         UserDao userDao = new UserDao(connection);
         //User user = userDao.get(1);
 
         //请求建立的 object，并非是真正存储在java内存的
         User user3 = new User();
-        user3.setEmail("yyydJin@gmail.com");
-        user3.setName("Chang Ken Jin");
+        user3.setEmail("in@gmail.com");
+        user3.setName("Chan Bao");
         user3.setAdmin(false);
-        user3.setPassword("12345");
-        userDao.save(user3);
+        user3.setPassword("123456");
+        User savedUser = userDao.save(user3);
+
+
+        CardDao cardDao = new CardDao(connection);
+        Card card1 = new Card();
+        card1.setActive(true);
+        card1.setUid(savedUser.getUid());
+        cardDao.save(card1);
 
 //        User user2 = userDao.get(2);
 
@@ -38,7 +47,7 @@ public class Main {
 //        btnLogin.addActionListener(
 //                new ActionListener(){
 //                    public void actionPerformed(ActionEvent e) {
-//                        LoginDialog loginDlg = new LoginDialog(frame);
+//                        view.LoginDialog loginDlg = new view.LoginDialog(frame);
 //                        loginDlg.setVisible(true);
 //                        // if logon successfully
 //                        if(loginDlg.isSucceeded()){
@@ -50,7 +59,7 @@ public class Main {
 //        btnRegister.addActionListener(
 //                new ActionListener(){
 //                    public void actionPerformed(ActionEvent e) {
-//                        SignUpDialog signUpDialog  = new SignUpDialog(frame);
+//                        view.SignUpDialog signUpDialog  = new view.SignUpDialog(frame);
 //                        signUpDialog.setVisible(true);
 //                        // if register successfully
 //                        if(signUpDialog.isSucceeded()){
