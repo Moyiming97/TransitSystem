@@ -1,9 +1,8 @@
-package service;
+package edu.toronto.group0162.service;
 
-import dao.CardDao;
-import dao.UserDao;
-import entity.Card;
-import entity.User;
+import edu.toronto.group0162.dao.CardDao;
+import edu.toronto.group0162.dao.UserDao;
+import edu.toronto.group0162.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -25,18 +24,23 @@ public class UserService {
     return this.userDao.updateAdmin(save);
   }
 
-  public Card addCard(int uid, Card card) {
-    final User user = this.userDao.get(uid);
-    if (null == user) {
-      return null;
-    }
-    card.setUid(uid);
-    return this.cardDao.save(card);
-  }
+
+
+//  public void deleteCard(Card card) {
+//    //card.getCid()
+////    final Card cardDelete = this.cardDao.get(card.getCid());
+//    if (this.cardDao.get(card.getCid()) != null) {
+//      this.cardDao.delete(card.getCid());
+//    }
+//
+//  }
 
   public boolean checkEmailAvailability(String email) {
     //如果是NUL，可以加这个USER
     return this.userDao.get(email) == null;
+  }
 
+  public User searchUser(String email){
+    return this.userDao.get(email);
   }
 }

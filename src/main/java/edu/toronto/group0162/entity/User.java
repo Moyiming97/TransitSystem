@@ -1,7 +1,7 @@
-package entity;
+package edu.toronto.group0162.entity;
 
 import lombok.Data;
-import lombok.Value;
+
 
 @Data
 public class User {
@@ -15,12 +15,6 @@ public class User {
   //option attribute from GUI
   private String Birthday;
   private String membership;
+  private long createAt;
 
-//  public User(int uid, String name, String email, boolean isAdmin, String password){
-//    this.uid = uid;
-//    this.name = name;
-//    this.email = email;
-//    this.isAdmin = false;
-//    this.password = password;
-//  }
 }

@@ -1,4 +1,4 @@
-package view;
+package edu.toronto.group0162.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -6,6 +6,9 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -16,8 +19,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
-import entity.User;
-import service.UserService;
+import edu.toronto.group0162.entity.User;
+import edu.toronto.group0162.service.UserService;
 
 public class SignUpDialog extends JDialog {
 
@@ -29,17 +32,33 @@ public class SignUpDialog extends JDialog {
 
   private final JTextField tfEmail;
 
+  private final JTextField tfBirthday;
+
   private final JLabel lbUsername;
 
   private final JLabel lbPassword;
 
   private final JLabel lbEmail;
 
+  private final JLabel lbBirthday;
+
   private final JButton btnRegister;
 
   private final JButton btnCancel;
 
   private boolean succeeded;
+
+//  public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+//          Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+  public static boolean validate (String capturedEmail){
+    Pattern VALID_EMAIL_ADDRESS_REGEX =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    //无所谓大小写.com，至少有两个，至少有六个，ca....com....edu...
+    Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(capturedEmail);
+
+    return matcher.find();
+  }
 
   private void onClickRegister(ActionEvent e) {
 
@@ -48,7 +67,11 @@ public class SignUpDialog extends JDialog {
     user.setName(this.getUsername());
     user.setPassword(this.getPassword());
 
-    if (!this.userService.checkEmailAvailability(user.getEmail())) {
+
+
+    if (
+            !validate(user.getEmail())||
+            !this.userService.checkEmailAvailability(user.getEmail())) {
       JOptionPane.showMessageDialog(SignUpDialog.this,
                                     "Invalid email or email existed",
                                     "Register",
@@ -115,9 +138,22 @@ public class SignUpDialog extends JDialog {
     cs.gridwidth = 2;
     panel.add(tfEmail, cs);
 
+    lbBirthday = new JLabel("Birthday: ");
+    cs.gridx = 0;
+    cs.gridy = 3;
+    cs.gridwidth = 1;
+    panel.add(lbBirthday, cs);
+
+    tfBirthday = new JTextField(15);
+    cs.gridx = 1;
+    cs.gridy = 3;
+    cs.gridwidth = 2;
+    panel.add(tfBirthday, cs);
+
     btnRegister = new JButton("Register");
 
     btnRegister.addActionListener((ActionEvent e) -> this.onClickRegister(e));
+    // tfEmail.addKeyListener((KeyEvent e) -> this.onTypePassword(e));
 
     //back to LogIn Page
     btnCancel = new JButton("Cancel");
@@ -150,5 +186,18 @@ public class SignUpDialog extends JDialog {
 
   public boolean isSucceeded() {
     return succeeded;
+  }
+
+//  public static KeyListener getKeyListener(){
+//    return new KeyAdapter() {
+//      public void keyTyped(KeyEvent e) {
+//        System.out.println(e.getKeyChar());
+//      }
+//    };
+
+//  }
+
+  private void onTypePassword(KeyEvent e) {
+    validate(this.getEmail());
   }
 }
